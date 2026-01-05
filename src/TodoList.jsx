@@ -2,9 +2,14 @@ import TodoListItem from "./TodoListItem";
 
 function TodoList({todoList}) {
  return (
-    <ul>
+  <>
+    {todoList.length>0?
+    (<ul>
       {todoList.map((todo) => (<TodoListItem key={todo.id} todo={todo}/>))}
-    </ul>
+    </ul>)
+    :(<p>Please enter a todo</p>)}
+  </>
+
   );
 }
 
