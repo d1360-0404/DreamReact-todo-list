@@ -19,7 +19,7 @@ function TodoForm({onAddTodo}) {
 				name="title" ref={todoTitleInput} 
 				value={workingTodoTitle} 
 				onChange={(event)=>setWorkingTodoTitle(event.target.value)}/>
-			<button disabled={workingTodoTitle=== ""}>Add todo</button>
+			<button disabled={workingTodoTitle===" "}>Add todo</button>
 		</form>
   )
 }
