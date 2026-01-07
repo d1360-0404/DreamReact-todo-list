@@ -1,16 +1,18 @@
+import { useState } from "react";
 import TodoListItem from "./TodoListItem";
 
-function TodoList({todoList,onCompleteTodo}) {
+function TodoList({todoList,onCompleteTodo,onUpdateTodo}) {
   const filterTodoList=todoList.filter((todo)=>todo.isCompleted !=true);
   return (
   <>
-    {todoList.length===0?
+    {todoList.length>0?
     (<ul>
       {filterTodoList.map((todo) => (
         <TodoListItem 
         key={todo.id} 
         todo={todo} 
         onCompleteTodo={onCompleteTodo}
+        onUpdateTodo={onUpdateTodo}
         />
         ))}
     </ul>)
