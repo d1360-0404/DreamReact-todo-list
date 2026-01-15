@@ -5,7 +5,7 @@ function TodoListItem({todo,onCompleteTodo,onUpdateTodo}){
   const[isEditing,setIsEditing]=useState(false);
   const [workingTitle,setWorkingTitle]=useState(todo.title);
 
-  function handlCancel(){
+  function handelCancel(){
     setWorkingTitle(todo.title);
     setIsEditing(false);
   }
@@ -27,8 +27,8 @@ return (
     <form onSubmit={handelUpdate}>
       {isEditing?(
         <>
-          <TextInputWithLabel value={workingTitle} onChange={handleEdit}/>
-          <button type="button" onClick={handlCancel}>Cancel</button>
+          <TextInputWithLabel elementId={`edit-${todo.id}`} value={workingTitle} onChange={handleEdit}/>
+          <button type="button" onClick={handelCancel}>Cancel</button>
           <button type="button" onClick={handelUpdate}>Update</button>
         </>
       ):
