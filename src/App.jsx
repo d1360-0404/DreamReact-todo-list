@@ -2,6 +2,7 @@ import './App.css'
 import TodoList from "./features/TodoList/TodoList.jsx";
 import TodoForm  from "./features/TodoForm.jsx";
 import { useEffect, useState } from 'react';
+import { sendResquest } from './util/util.js';
 
 function App() {
   const [todoList, setTodoList]=useState([]);
@@ -21,29 +22,22 @@ function App() {
         },
       };
       try {
-          const resp=await fetch(url,options);
-          if(!resp.ok){
-            throw new Error(resp.message);
-          }
-          const {records}=await resp.json();
-          setTodoList(records.map((record)=>{
-            const example={
+         const respond=await sendResquest(url,options,setErrorMessage)
+         if (!respond) return;
+         const {records}= await respond.json();
+         setTodoList(records.map((record)=>{
+          const example={
               id:record.id,
               title: record.fields.title,                 
               isCompleted: record.fields.isCompleted ?? false,
             }
             return example;
           }));
-          
-        } 
-        catch (error) {
-          setErrorMessage(error.message);
       }finally{
-        setLoading(false);
+        setLoading(false); 
       }
     };
     fetchTodos();
-  
   },[]);
 
   async function addTodo(newTodo){
@@ -65,26 +59,19 @@ function App() {
       },
       body:JSON.stringify(payload),
     };
-    try {
       setIsSaving(true);
-      const resp=await fetch(url,option);
-      if(!resp.ok){
-        throw new Error(resp.message)
-      }
-      const {records}=await resp.json();
-      const savedTodo={
-        id:records[0].id,
-        title:records[0].fields.title,
-        isCompleted: records[0].fields.isCompleted ?? false
-      };       
-      setTodoList([...todoList,savedTodo]);
-      
-    } catch (error) {
-      console.log(error.message);
-      setErrorMessage(error.message);
-    }finally{
-      setIsSaving(false);
-    }
+      try {
+        const respond=await sendResquest(url,option,setErrorMessage);
+        if (!respond) return;
+        const {records}=await respond.json();
+        const savedTodo={
+          id:records[0].id,
+          title:records[0].fields.title,
+          isCompleted: records[0].fields.isCompleted ?? false};   
+        setTodoList([...todoList,savedTodo]);    
+      } finally {
+          setIsSaving(false);
+        }
   }
   function completeTodo(id) {
     const updatedTodos=todoList.map((todo)=>{
@@ -119,10 +106,7 @@ function App() {
        body:JSON.stringify(payload),
     }
     try {
-      const resp=await fetch(url,options);
-      if(!resp.ok){
-        throw new Error(resp.message)
-      }
+      await sendResquest(url,options,setErrorMessage);
       setTodoList((prevTodos) =>
       prevTodos.map((todo) =>
       todo.id === editedTodo.id ? editedTodo : todo
@@ -139,8 +123,9 @@ function App() {
         return todo;
       })
       setTodoList([... convertedTodos]);
-    }finally{
-      setIsSaving(false);
+    }
+    finally{
+            setIsSaving(false);
     }
 
   };
