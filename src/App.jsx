@@ -4,6 +4,11 @@ import TodoForm  from "./features/TodoForm.jsx";
 import { useEffect, useState } from 'react';
 import { sendResquest } from './util/util.js';
 
+function encodeUrl(sortField,sortDirection,url){
+  let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
+  return encodeURI(`${url}?${sortQuery}`);
+}
+
 function App() {
   const [todoList, setTodoList]=useState([]);
   const [isLoading,setLoading]=useState(false);
@@ -11,6 +16,8 @@ function App() {
   const [isSaving,setIsSaving]=useState(false);
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
+  const [sortField,setSortField]=useState("createTime");
+  const [sortDirection,setSortDirection]=useState("desc");
   
   useEffect(()=>{
     const fetchTodos = async () => {
@@ -22,7 +29,7 @@ function App() {
         },
       };
       try {
-         const respond=await sendResquest(url,options,setErrorMessage)
+         const respond=await sendResquest(encodeUrl(sortField,sortDirection,url),options,setErrorMessage);
          if (!respond) return;
          const {records}= await respond.json();
          setTodoList(records.map((record)=>{
@@ -51,7 +58,7 @@ function App() {
         },
       ],
     };
-    const option={
+    const options={
       method:'POST',
       headers:{
         Authorization:token,
@@ -61,7 +68,7 @@ function App() {
     };
       setIsSaving(true);
       try {
-        const respond=await sendResquest(url,option,setErrorMessage);
+        const respond=await sendResquest(encodeUrl(sortField,sortDirection,url),options,setErrorMessage);
         if (!respond) return;
         const {records}=await respond.json();
         const savedTodo={
@@ -106,7 +113,7 @@ function App() {
        body:JSON.stringify(payload),
     }
     try {
-      await sendResquest(url,options,setErrorMessage);
+      await sendResquest(encodeUrl(sortField,sortDirection,url),options,setErrorMessage);
       setTodoList((prevTodos) =>
       prevTodos.map((todo) =>
       todo.id === editedTodo.id ? editedTodo : todo
