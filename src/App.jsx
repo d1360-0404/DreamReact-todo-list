@@ -3,6 +3,7 @@ import TodoList from "./features/TodoList/TodoList.jsx";
 import TodoForm  from "./features/TodoForm.jsx";
 import { useEffect, useState } from 'react';
 import { sendResquest } from './util/util.js';
+import TodosViewsForm from './features/TodosViewsForm.jsx';
 
 function encodeUrl(sortField,sortDirection,url){
   let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
@@ -145,6 +146,7 @@ function App() {
       {errorMessage !=""? (
         <div>
           <hr />
+          <TodosViewsForm/>
           <p>{errorMessage}</p>
           <button onClick={()=>{
             setErrorMessage('');
@@ -152,6 +154,7 @@ function App() {
         </div>
         ) : null
       }
+      <TodosViewsForm/>
       </div>
   )
 }
