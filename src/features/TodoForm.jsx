@@ -22,7 +22,7 @@ function TodoForm({onAddTodo}) {
 			label={"Todo"}
 			>
 			</TextInputWithLabel>
-			<button disabled={workingTodoTitle===" "}>Add todo</button>
+			<button disabled={workingTodoTitle.trim()===""}>Add todo</button>
 		</form>
   )
 }
