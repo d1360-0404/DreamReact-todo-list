@@ -16,14 +16,14 @@ function App() {
   const [sortDirection,setSortDirection]=useState("desc");
   const [queryString,setQueryString]=useState("");
 
-  const encodeUrl=useCallback((sortField,sortDirection,url,queryString)=>{
+  const encodeUrl=useCallback(()=>{
     let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
     let searchQuery="";
     if (queryString!==''){
       searchQuery = `&filterByFormula=SEARCH("${queryString}",+title)`;
     }
     return encodeURI(`${url}?${sortQuery}${searchQuery}`);
-    },[])
+    },[sortField, sortDirection, queryString, url])
   
   useEffect(()=>{
     const fetchTodos = async () => {
@@ -35,7 +35,7 @@ function App() {
         },
       };
       try {
-         const respond=await sendResquest(encodeUrl());
+         const respond=await sendResquest(encodeUrl(),options,setErrorMessage);
          if (!respond) return;
          const {records}= await respond.json();
          setTodoList(records.map((record)=>{
