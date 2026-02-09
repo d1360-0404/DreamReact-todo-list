@@ -1,18 +1,9 @@
 import './App.css'
 import TodoList from "./features/TodoList/TodoList.jsx";
 import TodoForm  from "./features/TodoForm.jsx";
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useCallback } from 'react';
 import { sendResquest } from './util/util.js';
 import TodosViewsForm from './features/TodosViewsForm.jsx';
-
-function encodeUrl(sortField,sortDirection,url,queryString){
-  let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
-  let searchQuery="";
-  if (queryString!==''){
-    searchQuery = `&filterByFormula=SEARCH("${queryString}",+title)`;
-  }
-  return encodeURI(`${url}?${sortQuery}${searchQuery}`);
-}
 
 function App() {
   const [todoList, setTodoList]=useState([]);
@@ -24,6 +15,15 @@ function App() {
   const [sortField,setSortField]=useState("createdTime");
   const [sortDirection,setSortDirection]=useState("desc");
   const [queryString,setQueryString]=useState("");
+
+  const encodeUrl=useCallback(()=>{
+    let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
+    let searchQuery="";
+    if (queryString!==''){
+      searchQuery = `&filterByFormula=SEARCH("${queryString}",+title)`;
+    }
+    return encodeURI(`${url}?${sortQuery}${searchQuery}`);
+    },[sortField, sortDirection, queryString, url])
   
   useEffect(()=>{
     const fetchTodos = async () => {
@@ -35,7 +35,7 @@ function App() {
         },
       };
       try {
-         const respond=await sendResquest(encodeUrl(sortField,sortDirection,url,queryString),options,setErrorMessage);
+         const respond=await sendResquest(encodeUrl(),options,setErrorMessage);
          if (!respond) return;
          const {records}= await respond.json();
          setTodoList(records.map((record)=>{
