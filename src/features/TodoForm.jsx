@@ -22,11 +22,7 @@ function TodoForm({onAddTodo,isSaving}) {
 			label={"Todo"}
 			>
 			</TextInputWithLabel>
-			<button disabled={workingTodoTitle===""}>
-				{
-					isSaving? 'Saving':'Add todo'
-				}
-			</button>
+			<button disabled={workingTodoTitle.trim()===""}>Add todo</button>
 		</form>
   )
 }
