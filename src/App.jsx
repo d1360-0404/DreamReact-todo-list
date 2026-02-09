@@ -3,6 +3,16 @@ import TodoList from "./features/TodoList/TodoList.jsx";
 import TodoForm  from "./features/TodoForm.jsx";
 import { useEffect, useState } from 'react';
 import { sendResquest } from './util/util.js';
+import TodosViewsForm from './features/TodosViewsForm.jsx';
+
+function encodeUrl(sortField,sortDirection,url,queryString){
+  let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
+  let searchQuery="";
+  if (queryString!==''){
+    searchQuery = `&filterByFormula=SEARCH("${queryString}",+title)`;
+  }
+  return encodeURI(`${url}?${sortQuery}${searchQuery}`);
+}
 
 function App() {
   const [todoList, setTodoList]=useState([]);
@@ -11,6 +21,9 @@ function App() {
   const [isSaving,setIsSaving]=useState(false);
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
+  const [sortField,setSortField]=useState("createdTime");
+  const [sortDirection,setSortDirection]=useState("desc");
+  const [queryString,setQueryString]=useState("");
   
   useEffect(()=>{
     const fetchTodos = async () => {
@@ -22,7 +35,7 @@ function App() {
         },
       };
       try {
-         const respond=await sendResquest(url,options,setErrorMessage)
+         const respond=await sendResquest(encodeUrl(sortField,sortDirection,url,queryString),options,setErrorMessage);
          if (!respond) return;
          const {records}= await respond.json();
          setTodoList(records.map((record)=>{
@@ -38,7 +51,7 @@ function App() {
       }
     };
     fetchTodos();
-  },[]);
+  },[sortDirection,sortField,queryString]);
 
   async function addTodo(newTodo){
     const payload ={
@@ -51,7 +64,7 @@ function App() {
         },
       ],
     };
-    const option={
+    const options={
       method:'POST',
       headers:{
         Authorization:token,
@@ -61,7 +74,7 @@ function App() {
     };
       setIsSaving(true);
       try {
-        const respond=await sendResquest(url,option,setErrorMessage);
+        const respond=await sendResquest(url,options,setErrorMessage);
         if (!respond) return;
         const {records}=await respond.json();
         const savedTodo={
@@ -145,6 +158,15 @@ function App() {
         </div>
         ) : null
       }
+      <TodosViewsForm 
+        sortDirection={sortDirection}
+        setSortDirection={setSortDirection}
+        sortField={sortField}
+        setSortField={setSortField}
+        queryString={queryString}
+        setQueryString={setQueryString}
+        
+      />
       </div>
   )
 }
