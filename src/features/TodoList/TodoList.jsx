@@ -1,8 +1,13 @@
 import { useState } from "react";
 import TodoListItem from "./TodoListItem";
 
-function TodoList({todoList,onCompleteTodo,onUpdateTodo}) {
+function TodoList({todoList,onCompleteTodo,onUpdateTodo,isLoading}) {
   const filterTodoList=todoList.filter((todo)=>todo.isCompleted !=true);
+  if(isLoading){
+    return(<p>
+      Todo list loading...
+    </p>)
+  }
   return (
   <>
     {todoList.length>0?
