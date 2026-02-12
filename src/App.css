@@ -1,0 +1,50 @@
+*:focus {
+  outline: black;
+}
+body{
+  background-color: linen;
+  font-family: "Pixelify Sans", sans-serif;
+}
+h1{
+  font-weight: bolder;
+  font-size: 72px;
+}
+select{
+  font-family: "Pixelify Sans", sans-serif; ;
+
+}
+label{
+  font-size: 24px;
+}
+input{
+  border-style:dashed;
+  background:transparent;
+  border-color: black;
+    font-family: "Pixelify Sans", sans-serif;
+}
+button{
+  font-family: "Pixelify Sans", sans-serif;
+  background-color: transparent;
+  border-color: black;
+}
+input:focus{
+   border-style: solid;
+}
+
+button:hover{
+  cursor: pointer;
+}
+input:hover{
+  cursor:pointer;
+}
+.header{
+  display: flex;
+  align-items: center;
+}
+.header img{
+  width:128px;
+  height:auto;
+}
+
+
+

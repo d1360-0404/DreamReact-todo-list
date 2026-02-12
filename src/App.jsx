@@ -4,6 +4,7 @@ import TodoForm  from "./features/TodoForm.jsx";
 import { useEffect, useState,useCallback } from 'react';
 import { sendResquest } from './util/util.js';
 import TodosViewsForm from './features/TodosViewsForm.jsx';
+import styles from "./assets/App.module.css"
 
 function App() {
   const [todoList, setTodoList]=useState([]);
@@ -144,12 +145,16 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>My Todos</h1>
+    <div className={styles.AppStyle}>
+      <div className="header">
+        <img src="learns-dark.png" alt="logo" />
+        <h1>My Todos</h1>  
+      </div>
+        
       <TodoForm onAddTodo={addTodo} isSaving={isSaving}/>
       <TodoList todoList={todoList} onCompleteTodo={completeTodo} onUpdateTodo={updateTodo} isLoading={isLoading}/>
       {errorMessage !=""? (
-        <div>
+        <div className={styles.DivErrorStyle}>
           <hr />
           <p>{errorMessage}</p>
           <button onClick={()=>{
