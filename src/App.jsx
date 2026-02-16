@@ -6,6 +6,7 @@ import { sendResquest } from './util/util.js';
 import TodosViewsForm from './features/TodosViewsForm.jsx';
 import styles from "./assets/App.module.css"
 
+
 function App() {
   const [todoList, setTodoList]=useState([]);
   const [isLoading,setLoading]=useState(false);
@@ -47,7 +48,9 @@ function App() {
             }
             return example;
           }));
-      }finally{
+        }catch (error) {
+          setErrorMessage(error.message);
+        }finally{
         setLoading(false); 
       }
     };
@@ -83,7 +86,9 @@ function App() {
           title:records[0].fields.title,
           isCompleted: records[0].fields.isCompleted ?? false};   
         setTodoList([...todoList,savedTodo]);    
-      } finally {
+      }catch (error) {
+          setErrorMessage(error.message);
+      }finally {
           setIsSaving(false);
         }
   }
