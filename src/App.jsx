@@ -85,7 +85,7 @@ function App() {
         const {records}=await respond.json();
         dispatch({type: todoActions.addTodo, records:records})  
       }catch (error) {
-          dispatch({type: todoActions.setLoadError});
+          dispatch({type: todoActions.setLoadError,error: error.message,});
       }finally {
           dispatch({type: todoActions.endRequest});
 
@@ -123,7 +123,6 @@ function App() {
       dispatch({type: todoActions.updateTodo, editedTodo})
     ;
     } catch (error) {
-      console.log(error.message);
       dispatch({type: todoActions.revertTodo, originalTodo,error:`${error.message}. Reverting todo...` })
     }
     finally{
@@ -143,7 +142,6 @@ function App() {
       
       {todoState.errorMessage!=""? (
         <div className={styles.DivErrorStyle}>
-          <hr />
           <p>{todoState.errorMessage}</p>
           <button onClick={()=>{
             dispatch({type: todoActions.clearError});

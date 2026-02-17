@@ -58,7 +58,7 @@ function reducer(state=initialState, action){
     case 'setLoadError':
       return{
         ...state,
-        errorMessage:action.errorMessage,
+        errorMessage:action.error,
         isLoading:false,
       };
     case 'startRequest':
