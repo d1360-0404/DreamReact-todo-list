@@ -53,6 +53,7 @@ function App() {
           dispatch({type: todoActions.setLoadError,error: error.message,});
         }finally{
         dispatch({type: todoActions.turnOffLoading});
+
       }
     };
     fetchTodos();
@@ -87,6 +88,7 @@ function App() {
           dispatch({type: todoActions.setLoadError});
       }finally {
           dispatch({type: todoActions.endRequest});
+
         }
   }
   function completeTodo(id) {
@@ -138,11 +140,7 @@ function App() {
       </div>
         
       <TodoForm onAddTodo={addTodo} isSaving={todoState.isSaving}/>
-      <TodoList 
-      todoList={todoState.todoList} 
-      onCompleteTodo={completeTodo} 
-      onUpdateTodo={updateTodo} 
-      isLoading={todoState.isLoading}/>
+      
       {todoState.errorMessage!=""? (
         <div className={styles.DivErrorStyle}>
           <hr />
@@ -151,7 +149,11 @@ function App() {
             dispatch({type: todoActions.clearError});
           }}>Dismiss</button>
         </div>
-        ) : null
+        ) : <TodoList 
+      todoList={todoState.todoList} 
+      onCompleteTodo={completeTodo} 
+      onUpdateTodo={updateTodo} 
+      isLoading={todoState.isLoading}/>
       }
       <TodosViewsForm 
         sortDirection={sortDirection}
