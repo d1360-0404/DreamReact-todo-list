@@ -1,4 +1,3 @@
-import { reducer } from "react";
 
 const initialState={
   todoList:[],
@@ -24,17 +23,23 @@ const actions = {
     revertTodo: 'revertTodo',
     //action on Dismiss Error button
     clearError: 'clearError',
+    turnOffLoading:'turnOffloading'
 };
 
 function reducer(state=initialState, action){
 
   switch(action.type){
-    case action.fetchTodos:
+    case 'turnOffloading':
+      return {
+        ...state,
+        isLoading:false
+      }
+    case 'fetchTodos':
       return{
         ...state,
         isLoading:true,
       };
-    case action.loadTodos:
+    case 'loadTodos':
       const list=action.records.map((record)=>{
         const todo={
           id:record.id,
@@ -50,18 +55,18 @@ function reducer(state=initialState, action){
         todoList:[...list],
         isLoading:false,
       };
-    case action.setLoadError:
+    case 'setLoadError':
       return{
         ...state,
-        errorMessage:action.error.message,
+        errorMessage:action.errorMessage,
         isLoading:false,
       };
-    case action.startRequest:
+    case 'startRequest':
       return{
         ...state,
         isSaving:true,
       };
-    case action.addTodo:
+    case 'addTodo':
       const savedTodo={
         id:action.records[0].id,
         title:action.records[0].fields.title,
@@ -72,28 +77,31 @@ function reducer(state=initialState, action){
         todoList:[...state.todoList,savedTodo],
         isSaving:false,
       };
-    case action.endRequest:
+    case 'endRequest':
       return{
         ...state,
         isLoading:false,
         isSaving:false,
       };
-    case action.completeTodo:
-      const updateTodo=todoList.map((todo)=>{
+    case 'completeTodo':
+      const updateTodo=state.todoList.map((todo)=>{
         if(todo.id===action.id){
           return {...todo,isCompleted:true}
+        }
+        else{
+          return todo;
         }
       });
       return{
         ...state,
         todoList:updateTodo
       };
-    case action.revertTodo:
+    case 'revertTodo':
       action.editedTodo = action.originalTodo;
       
-     case action.updateTodo:
+     case 'updateTodo':
       const updatedTodos=state.todoList.map((todo)=>{
-        todo.id === action.editedTodo.id ? action.editedTodo : todo
+        return todo.id === action.editedTodo.id ? action.editedTodo : todo
       });
       const updatedState={
         ...state,
@@ -102,10 +110,8 @@ function reducer(state=initialState, action){
       if(action.error){
          updatedState.errorMessage = action.error.message;
       }
-      return{
-        updatedState
-      };  
-    case action.clearError:
+      return updatedState ;
+    case 'clearError':
       return{
         ...state,
         errorMessage:""
@@ -114,4 +120,4 @@ function reducer(state=initialState, action){
 }
 
 
-export {initialState,actions,initialState};
+export {actions,reducer,initialState};
