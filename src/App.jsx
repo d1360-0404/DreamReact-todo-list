@@ -11,7 +11,7 @@ function App() {
   const [isLoading,setLoading]=useState(false);
   const [errorMessage,setErrorMessage]=useState(""); 
   const [isSaving,setIsSaving]=useState(false);
-  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}s`;
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
   const [sortField,setSortField]=useState("createdTime");
   const [sortDirection,setSortDirection]=useState("desc");
@@ -47,6 +47,8 @@ function App() {
             }
             return example;
           }));
+      }catch (error) {
+          setErrorMessage(error.message);
       }finally{
         setLoading(false); 
       }
@@ -83,7 +85,9 @@ function App() {
           title:records[0].fields.title,
           isCompleted: records[0].fields.isCompleted ?? false};   
         setTodoList([...todoList,savedTodo]);    
-      } finally {
+      }catch (error) {
+          setErrorMessage(error.message); }
+       finally {
           setIsSaving(false);
         }
   }
@@ -152,16 +156,15 @@ function App() {
       </div>
         
       <TodoForm onAddTodo={addTodo} isSaving={isSaving}/>
-      <TodoList todoList={todoList} onCompleteTodo={completeTodo} onUpdateTodo={updateTodo} isLoading={isLoading}/>
+      
       {errorMessage !=""? (
         <div className={styles.DivErrorStyle}>
-          <hr />
           <p>{errorMessage}</p>
           <button onClick={()=>{
             setErrorMessage('');
           }}>Dismiss</button>
         </div>
-        ) : null
+        ) : <TodoList todoList={todoList} onCompleteTodo={completeTodo} onUpdateTodo={updateTodo} isLoading={isLoading}/>
       }
       <TodosViewsForm 
         sortDirection={sortDirection}
