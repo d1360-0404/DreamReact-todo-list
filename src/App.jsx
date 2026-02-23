@@ -36,7 +36,7 @@ function App() {
         },
       };
       try {
-         const respond=await sendResquest(encodeUrl(),options,setErrorMessage);
+         const respond=await sendResquest(encodeUrl(),options);
          if (!respond) return;
          const {records}= await respond.json();
          setTodoList(records.map((record)=>{
@@ -77,7 +77,7 @@ function App() {
     };
       setIsSaving(true);
       try {
-        const respond=await sendResquest(url,options,setErrorMessage);
+        const respond=await sendResquest(url,options);
         if (!respond) return;
         const {records}=await respond.json();
         const savedTodo={
@@ -124,7 +124,7 @@ function App() {
        body:JSON.stringify(payload),
     }
     try {
-      await sendResquest(url,options,setErrorMessage);
+      await sendResquest(url,options);
       setTodoList((prevTodos) =>
       prevTodos.map((todo) =>
       todo.id === editedTodo.id ? editedTodo : todo
@@ -132,7 +132,6 @@ function App() {
     );
       
     } catch (error) {
-      console.log(error.message);
       setErrorMessage(`${error.message}. Reverting todo...`);
       const convertedTodos=todoList.map((todo)=>{
         if (todo.id== editedTodo.id){
@@ -143,7 +142,7 @@ function App() {
       setTodoList([... convertedTodos]);
     }
     finally{
-            setIsSaving(false);
+      setIsSaving(false);
     }
 
   };
