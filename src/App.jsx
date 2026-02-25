@@ -4,7 +4,7 @@ import Header from './pages/Header.jsx';
 import { useEffect, useState,useCallback,useReducer } from 'react';
 import { sendResquest } from './util/util.js';
 import styles from "./assets/App.module.css"
-import { useLocation,Route,Routes  } from 'react-router';
+import { useLocation,Route,Routes} from 'react-router';
 import About from './pages/About.jsx';
 import NotFound from './pages/NotFound.jsx';
 import {
@@ -15,10 +15,6 @@ import {
 
 
 function App() {
-  //const [todoList, setTodoList]=useState([]);
-  //const [isLoading,setLoading]=useState(false);
-  //const [errorMessage,setErrorMessage]=useState(""); 
-  //const [isSaving,setIsSaving]=useState(false);
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
   const token = `Bearer ${import.meta.env.VITE_PAT}`;
   const [sortField,setSortField]=useState("createdTime");
