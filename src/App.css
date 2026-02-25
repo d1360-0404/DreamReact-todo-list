@@ -20,7 +20,7 @@ input{
   border-style:dashed;
   background:transparent;
   border-color: black;
-    font-family: "Pixelify Sans", sans-serif;
+  font-family: "Pixelify Sans", sans-serif;
 }
 button{
   font-family: "Pixelify Sans", sans-serif;
@@ -37,14 +37,7 @@ button:hover{
 input:hover{
   cursor:pointer;
 }
-.header{
-  display: flex;
-  align-items: center;
-}
-.header img{
-  width:128px;
-  height:auto;
-}
+
 
 
 

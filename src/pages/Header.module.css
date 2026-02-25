@@ -1,0 +1,15 @@
+
+.nav{
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+}
+.inactive{
+  color: black;
+}
+.active{
+  color:#AD896E;
+  font-weight: bolder;
+}

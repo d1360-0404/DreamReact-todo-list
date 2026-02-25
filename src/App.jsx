@@ -1,10 +1,10 @@
 import './App.css'
-import TodoList from "./features/TodoList/TodoList.jsx";
-import TodoForm  from "./features/TodoForm.jsx";
+import TodosPage from './pages/TodosPage.jsx';
+import Header from './pages/Header.jsx';
 import { useEffect, useState,useCallback,useReducer } from 'react';
 import { sendResquest } from './util/util.js';
-import TodosViewsForm from './features/TodosViewsForm.jsx';
 import styles from "./assets/App.module.css"
+import { useLocation,Route,Routes  } from 'react-router';
 import {
   reducer as todosReducer,
   actions as todoActions,
@@ -24,6 +24,24 @@ function App() {
   const [queryString,setQueryString]=useState("");
 
   const [todoState,dispatch]=useReducer(todosReducer,initialTodosState);
+
+  const location=useLocation();
+  const [title,setTitle]=useState("My Todos")
+
+  useEffect(()=>{
+    switch(location.pathname){
+      case "/":
+        setTitle("Todo List");
+        break;
+      case "/about":
+        setTitle("About");
+        break;
+      default:
+        setTitle("Not Found");
+        break;
+    }
+
+  },[location.pathname])
 
   const encodeUrl=useCallback(()=>{
     let sortQuery = `sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
@@ -133,35 +151,27 @@ function App() {
 
   return (
     <div className={styles.AppStyle}>
-      <div className="header">
-        <img src="learns-dark.png" alt="logo" />
-        <h1>My Todos</h1>  
-      </div>
-        
-      <TodoForm onAddTodo={addTodo} isSaving={todoState.isSaving}/>
-      
-      {todoState.errorMessage!=""? (
-        <div className={styles.DivErrorStyle}>
-          <p>{todoState.errorMessage}</p>
-          <button onClick={()=>{
-            dispatch({type: todoActions.clearError});
-          }}>Dismiss</button>
-        </div>
-        ) : <TodoList 
-      todoList={todoState.todoList} 
-      onCompleteTodo={completeTodo} 
-      onUpdateTodo={updateTodo} 
-      isLoading={todoState.isLoading}/>
-      }
-      <TodosViewsForm 
-        sortDirection={sortDirection}
-        setSortDirection={setSortDirection}
-        sortField={sortField}
-        setSortField={setSortField}
-        queryString={queryString}
-        setQueryString={setQueryString}
-        
-      />
+        <Header title={title}></Header>
+        <Routes>
+          <Route path='/' element={
+             <TodosPage
+          todoState={todoState}
+          addTodo={addTodo}
+          completeTodo={completeTodo}
+          updateTodo={updateTodo}
+          dispatch={dispatch}
+          todoActions={todoActions}
+          sortDirection={sortDirection}
+          setSortDirection={setSortDirection}
+          sortField={sortField}
+          setSortField={setSortField}
+          queryString={queryString}
+          setQueryString={setQueryString}/>
+          }/>
+          <Route path='/about'/>
+          <Route path='/*'/>
+        </Routes>
+       
       </div>
   )
 }
