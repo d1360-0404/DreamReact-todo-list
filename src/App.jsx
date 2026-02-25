@@ -5,6 +5,8 @@ import { useEffect, useState,useCallback,useReducer } from 'react';
 import { sendResquest } from './util/util.js';
 import styles from "./assets/App.module.css"
 import { useLocation,Route,Routes  } from 'react-router';
+import About from './pages/About.jsx';
+import NotFound from './pages/NotFound.jsx';
 import {
   reducer as todosReducer,
   actions as todoActions,
@@ -168,8 +170,8 @@ function App() {
           queryString={queryString}
           setQueryString={setQueryString}/>
           }/>
-          <Route path='/about'/>
-          <Route path='/*'/>
+          <Route path='/about' element={<About/>}/>
+          <Route path='/*' element={<NotFound/>} />
         </Routes>
        
       </div>
