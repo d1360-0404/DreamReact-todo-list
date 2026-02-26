@@ -5,6 +5,7 @@
   right: 1.5rem;
   display: flex;
   gap: 1.5rem;
+  font-size: 24px;
 }
 .inactive{
   color: black;
@@ -12,4 +13,12 @@
 .active{
   color:#AD896E;
   font-weight: bolder;
+}
+.headerImgStyle{
+  width:96px;
+  height:auto;
+}
+.headerTitleImg{
+  display: flex;
+  align-items: center;
 }

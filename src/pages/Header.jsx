@@ -6,9 +6,10 @@ function Header({title}){
 
   return(
     <>
-    <div>
+    <div className={styles.headerTitleImg}>
+      <img src="learns-dark.png" alt="logo" className={styles.headerImgStyle} />
       <h1>{title}</h1>
-      <img src="learns-dark.png" alt="logo" />
+    </div>
       <nav className={styles.nav}>
        <NavLink to={"/"} 
          className={({ isActive }) =>isActive ?  styles.active: styles.inactive}>
@@ -19,7 +20,7 @@ function Header({title}){
           About
         </NavLink>
     </nav>
-    </div>
+
 
     </>
   )
