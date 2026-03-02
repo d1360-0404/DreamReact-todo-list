@@ -23,13 +23,13 @@ const actions = {
     revertTodo: 'revertTodo',
     //action on Dismiss Error button
     clearError: 'clearError',
-    turnOffLoading:'turnOffloading'
+    turnOffLoading:'turnOffLoading'
 };
 
 function reducer(state=initialState, action){
 
   switch(action.type){
-    case 'turnOffloading':
+    case 'turnOffLoading':
       return {
         ...state,
         isLoading:false
@@ -97,9 +97,10 @@ function reducer(state=initialState, action){
         todoList:updateTodo
       };
     case 'revertTodo':
-      action.editedTodo = action.originalTodo;
+      const revertTodo = action.originalTodo;
+      action = { ...action, editedTodo: revertTodo };
       
-     case 'updateTodo':
+    case 'updateTodo':
       const updatedTodos=state.todoList.map((todo)=>{
         return todo.id === action.editedTodo.id ? action.editedTodo : todo
       });
