@@ -1,5 +1,6 @@
 import { useState } from "react";
 import TodoListItem from "./TodoListItem";
+import styles from "../../assets/TodoList.module.css"
 
 function TodoList({todoList,onCompleteTodo,onUpdateTodo,isLoading}) {
   const filterTodoList=todoList.filter((todo)=>todo.isCompleted !=true);
@@ -11,7 +12,7 @@ function TodoList({todoList,onCompleteTodo,onUpdateTodo,isLoading}) {
   return (
   <>
     {todoList.length>0?
-    (<ul>
+    (<ul className={styles.TodoListStyle} >
       {filterTodoList.map((todo) => (
         <TodoListItem 
         key={todo.id} 

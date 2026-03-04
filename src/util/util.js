@@ -1,12 +1,28 @@
-export async function sendResquest(url,options,setErrorMessage){
-  try{
-      const resp=await fetch(url,options);
-      if(!resp.ok){
-        throw new Error(resp.message);
+export async function sendResquest(url,options){
+  const errorMessage="Unknown error"
+
+  try {
+    const resp=await fetch(url,options);
+    if(!resp.ok){
+      let errorMSG=null;
+      try{
+        //second try if await resp.json() fails
+        errorMSG=await resp.json();
       }
-      return resp;
-  }catch(error){
-    setErrorMessage(error.message);
-    throw error;
+      catch{
+      }
+      throw new Error(
+        //catches each possible edge case
+        errorMSG?.error?.message ||
+        errorMSG?.error ||
+        resp.statusText ||
+        errorMessage
+      );
+    }
+    return resp;
+  } catch (error) {
+    throw new Error(`Error: ${error.message}`);
   }
 }
+
+
