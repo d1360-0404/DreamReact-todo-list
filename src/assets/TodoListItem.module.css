@@ -1,0 +1,17 @@
+
+.TodoListItemStyle{
+  padding-bottom: 5px;
+  margin-bottom:10px;
+  font-size: 24px;
+  border-style:dashed;
+  border-radius: 5px;
+  border-width: 3px;
+  border-color: black;
+}
+.TodoListItemStyle:hover{
+  background-color:#AD896E;
+  font-weight: bolder;
+  color: #F0ECEA;
+  border-color: black;
+  border-style: solid;
+}

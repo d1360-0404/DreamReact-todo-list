@@ -4,6 +4,7 @@ import TodoForm  from "./features/TodoForm.jsx";
 import { useEffect, useState,useCallback } from 'react';
 import { sendResquest } from './util/util.js';
 import TodosViewsForm from './features/TodosViewsForm.jsx';
+import styles from "./assets/App.module.css"
 
 function App() {
   const [todoList, setTodoList]=useState([]);
@@ -35,7 +36,7 @@ function App() {
         },
       };
       try {
-         const respond=await sendResquest(encodeUrl(),options,setErrorMessage);
+         const respond=await sendResquest(encodeUrl(),options);
          if (!respond) return;
          const {records}= await respond.json();
          setTodoList(records.map((record)=>{
@@ -46,6 +47,8 @@ function App() {
             }
             return example;
           }));
+      }catch (error) {
+          setErrorMessage(error.message);
       }finally{
         setLoading(false); 
       }
@@ -74,7 +77,7 @@ function App() {
     };
       setIsSaving(true);
       try {
-        const respond=await sendResquest(url,options,setErrorMessage);
+        const respond=await sendResquest(url,options);
         if (!respond) return;
         const {records}=await respond.json();
         const savedTodo={
@@ -82,7 +85,9 @@ function App() {
           title:records[0].fields.title,
           isCompleted: records[0].fields.isCompleted ?? false};   
         setTodoList([...todoList,savedTodo]);    
-      } finally {
+      }catch (error) {
+          setErrorMessage(error.message); }
+       finally {
           setIsSaving(false);
         }
   }
@@ -119,7 +124,7 @@ function App() {
        body:JSON.stringify(payload),
     }
     try {
-      await sendResquest(url,options,setErrorMessage);
+      await sendResquest(url,options);
       setTodoList((prevTodos) =>
       prevTodos.map((todo) =>
       todo.id === editedTodo.id ? editedTodo : todo
@@ -127,7 +132,6 @@ function App() {
     );
       
     } catch (error) {
-      console.log(error.message);
       setErrorMessage(`${error.message}. Reverting todo...`);
       const convertedTodos=todoList.map((todo)=>{
         if (todo.id== editedTodo.id){
@@ -138,25 +142,28 @@ function App() {
       setTodoList([... convertedTodos]);
     }
     finally{
-            setIsSaving(false);
+      setIsSaving(false);
     }
 
   };
 
   return (
-    <div>
-      <h1>My Todos</h1>
+    <div className={styles.AppStyle}>
+      <div className="header">
+        <img src="learns-dark.png" alt="logo" />
+        <h1>My Todos</h1>  
+      </div>
+        
       <TodoForm onAddTodo={addTodo} isSaving={isSaving}/>
-      <TodoList todoList={todoList} onCompleteTodo={completeTodo} onUpdateTodo={updateTodo} isLoading={isLoading}/>
+      
       {errorMessage !=""? (
-        <div>
-          <hr />
+        <div className={styles.DivErrorStyle}>
           <p>{errorMessage}</p>
           <button onClick={()=>{
             setErrorMessage('');
           }}>Dismiss</button>
         </div>
-        ) : null
+        ) : <TodoList todoList={todoList} onCompleteTodo={completeTodo} onUpdateTodo={updateTodo} isLoading={isLoading}/>
       }
       <TodosViewsForm 
         sortDirection={sortDirection}

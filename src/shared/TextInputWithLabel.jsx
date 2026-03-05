@@ -1,9 +1,11 @@
+import styled from 'styled-components'
+
 function TextInputWithLabel({elementId,label,onChange,ref,value}){
 
   return(
   <>
     <label htmlFor={elementId}>{label}</label>
-    <input 
+    <input
     type="text" 
     id={elementId}
     ref={ref}
